@@ -8,6 +8,7 @@ try:
 
     cursor = conn.cursor()
 
+
     Patient = ('Alice', 30, 'test')
 
     cursor.execute("INSERT INTO Patient (Prenom, Nom, Age) VALUES (?, ?, ?)", Patient)
