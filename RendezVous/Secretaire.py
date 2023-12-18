@@ -3,7 +3,7 @@ import sqlite3
 
 class Secretaire:
 
-    def __init__(self, Prenom, nom, age, id):
+    def __init__(self, Prenom, nom, age, id=0):
         self.Prenom = Prenom
         self.nom = nom
         self.age = age
@@ -28,7 +28,7 @@ class Secretaire:
             cursor.execute('''
                 INSERT INTO secretaire (nom, prenom, age)
                 VALUES (?, ?, ?)
-            ''', (self.nom, self.prenom, self.age))
+            ''', (self.nom, self.Prenom, self.age))
 
             connection.commit()
             connection.close()
