@@ -50,94 +50,102 @@ def interfacePatient():
 
 
 def interfaceSecretaire():
-    print("1 Pour ajouter un secretaire")
-    print("2 Pour modifier un secretaire")
-    print("3 Pour supprimer un secretaire")
-    choix = input("Entrez votre choix (ou 'q' pour quitter) : ")
-    if choix == "1":
-        def ajouter_secretaire():
-            print("Entrez les détails du nouveau secretaire :")
-            Prenom = input("Nom du secretaire : ")
-            nom = input("Prenom du secretaire : ")
-            age = int(input("age du secretaire : "))
-            nouveau_secretaire = RendezVous.Secretaire.Secretaire(Prenom, nom, age)
-            nouveau_secretaire.add_to_database()
+    while True:
+        print("1 Pour ajouter un secretaire")
+        print("2 Pour modifier un secretaire")
+        print("3 Pour supprimer un secretaire")
+        choix = input("Entrez votre choix (ou 'q' pour quitter) : ")
 
-        ajouter_secretaire()
+        if choix == "1":
+            def ajouter_secretaire():
+                print("Entrez les détails du nouveau secretaire :")
+                prenom = input("Nom du secretaire : ")
+                nom = input("Prenom du secretaire : ")
+                age = int(input("age du secretaire : "))
+                nouveau_secretaire = Secretaire(prenom, nom, age)
+                nouveau_secretaire.add_to_database()
 
-    elif choix == "2":
-        def update_secretaire():
-            global connection
-            try:
-                id = int(input("Entrez l'ID du secretaire que vous voulez modifier : "))
-                connection = sqlite3.connect('database.sqlite')
-                cursor = connection.cursor()
+            ajouter_secretaire()
 
-                cursor.execute('SELECT * FROM secretaire WHERE SecretaireId = ?', (id,))
-                secretary_data = cursor.fetchone()
+        elif choix == "2":
+            def update_secretaire():
+                global connection
+                try:
+                    id = int(input("Entrez l'ID du secretaire que vous voulez modifier : "))
+                    connection = sqlite3.connect('database.sqlite')
+                    cursor = connection.cursor()
 
-                if secretary_data:
-                    print("Voici les détails actuels du secretaire :")
-                    print(f"ID: {secretary_data[0]}")
-                    print(f"Nom: {secretary_data[1]}")
-                    print(f"Prenom: {secretary_data[2]}")
-                    print(f"Age: {secretary_data[3]}")
+                    cursor.execute('SELECT * FROM secretaire WHERE id = ?', (id,))
+                    secretary_data = cursor.fetchone()
 
-                    print("\nEntrez les nouveaux détails du secretaire :")
-                    Prenom = input("Nouveau nom du secretaire : ")
-                    nom = input("Nouveau prenom du secretaire : ")
-                    age = int(input("Nouvel age du secretaire : "))
+                    if secretary_data:
+                        print("Voici les détails actuels du secretaire :")
+                        print(f"ID: {secretary_data[0]}")
+                        print(f"Nom: {secretary_data[1]}")
+                        print(f"Prenom: {secretary_data[2]}")
+                        print(f"Age: {secretary_data[3]}")
 
-                    nouveau_secretaire = Secretaire(Prenom, nom, age, id)
-                    nouveau_secretaire.update_from_database()
+                        print("\nEntrez les nouveaux détails du secretaire :")
+                        prenom = input("Nouveau nom du secretaire : ")
+                        nom = input("Nouveau prenom du secretaire : ")
+                        age = int(input("Nouvel age du secretaire : "))
 
-                else:
-                    print(f"Aucun secretaire trouvé avec l'ID {id}")
+                        nouveau_secretaire = Secretaire(prenom, nom, age, id)
+                        nouveau_secretaire.update_from_database()
 
-            except ValueError:
-                print("Veuillez entrer un ID valide.")
+                    else:
+                        print(f"Aucun secretaire trouvé avec l'ID {id}")
 
-            except sqlite3.Error as e:
-                print(f"Erreur lors de la récupération du secretaire : {e}")
+                except ValueError:
+                    print("Veuillez entrer un ID valide.")
 
-            finally:
-                if connection:
-                    connection.close()
+                except sqlite3.Error as e:
+                    print(f"Erreur lors de la récupération du secretaire : {e}")
 
-        update_secretaire()
-    elif choix == "3":
-        def remove_secretaire():
-            global connection
-            try:
-                Secretaire.displayAllData()
-                id = int(input("Entrez l'ID du secretaire que vous voulez supprimer : "))
-                connection = sqlite3.connect('database.sqlite')
-                cursor = connection.cursor()
+                finally:
+                    if connection:
+                        connection.close()
 
-                cursor.execute('SELECT * FROM secretaire WHERE SecretaireId = ?', (id,))
-                secretary_data = cursor.fetchone()
+            update_secretaire()
 
-                if secretary_data:
-                    print("Voici les détails actuels du secretaire :")
-                    print(f"ID: {secretary_data[0]}")
-                    print(f"Nom: {secretary_data[1]}")
-                    print(f"Prenom: {secretary_data[2]}")
-                    print(f"Age: {secretary_data[3]}")
+        elif choix == "3":
+            def remove_secretaire():
+                global connection
+                try:
+                    Secretaire.display_all_data()
+                    id = int(input("Entrez l'ID du secretaire que vous voulez supprimer : "))
+                    connection = sqlite3.connect('database.sqlite')
+                    cursor = connection.cursor()
 
-                    confirmation = input("Voulez-vous vraiment supprimer ce secretaire ? (o/n) : ")
-                    if confirmation.lower() == "o":
-                        secretaire_a_supprimer = Secretaire("", "", 0, id)
-                        secretaire_a_supprimer.remove_from_database()
+                    cursor.execute('SELECT * FROM secretaire WHERE id = ?', (id,))
+                    secretary_data = cursor.fetchone()
 
-                else:
-                    print(f"Aucun secretaire trouvé avec l'ID {id}")
-            except ValueError:
-                print("Veuillez entrer un ID valide.")
-            except sqlite3.Error as e:
-                print(f"Erreur lors de la récupération du secretaire : {e}")
+                    if secretary_data:
+                        print("Voici les détails actuels du secretaire :")
+                        print(f"ID: {secretary_data[0]}")
+                        print(f"Nom: {secretary_data[1]}")
+                        print(f"Prenom: {secretary_data[2]}")
+                        print(f"Age: {secretary_data[3]}")
 
-            finally:
-                if connection:
-                    connection.close()
+                        confirmation = input("Voulez-vous vraiment supprimer ce secretaire ? (o/n) : ")
+                        if confirmation.lower() == "o":
+                            secretaire_a_supprimer = Secretaire("", "", 0, id)
+                            secretaire_a_supprimer.remove_from_database()
 
-        remove_secretaire()
+                    else:
+                        print(f"Aucun secretaire trouvé avec l'ID {id}")
+                except ValueError:
+                    print("Veuillez entrer un ID valide.")
+                except sqlite3.Error as e:
+                    print(f"Erreur lors de la récupération du secretaire : {e}")
+
+                finally:
+                    if connection:
+                        connection.close()
+
+            remove_secretaire()
+
+        elif choix.lower() == "q":
+            break
+        else:
+            print("Choix invalide. Veuillez réessayer.")
