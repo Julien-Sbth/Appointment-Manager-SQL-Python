@@ -3,11 +3,11 @@
 import sqlite3
 
 class Patient:
-    def __init__(self, prenom, nom, age, sex):
+    def __init__(self, prenom, nom, age, sexe):
         self.prenom = prenom
         self.nom = nom
         self.age = age
-        self.sex = sex
+        self.sexe = sexe
 
     def add_to_database(self):
         try:
@@ -21,15 +21,15 @@ class Patient:
                     prenom TEXT NOT NULL,
                     nom TEXT NOT NULL,
                     age INTEGER NOT NULL,
-                    sex TEXT NOT NULL
+                    sexe TEXT NOT NULL
                 )
             ''')
 
             # Insertion du patient dans la base de données
             cursor.execute('''
-                INSERT INTO patient (prenom, nom, age, sex)
+                INSERT INTO patient (prenom, nom, age, sexe)
                 VALUES (?, ?, ?, ?)
-            ''', (self.prenom, self.nom, self.age, self.sex))
+            ''', (self.prenom, self.nom, self.age, self.sexe))
 
             connection.commit()
             connection.close()

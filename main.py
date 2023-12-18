@@ -1,6 +1,9 @@
 # main.py
+import interface
 
-from RendezVous.Patients import Patient
+
+def main():
+    interface.interfaceSecretaire()
 
 while True:
     print("1 Pour ajouter un patient")
