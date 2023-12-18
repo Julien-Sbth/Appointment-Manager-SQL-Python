@@ -28,7 +28,7 @@ class Secretaire:
             cursor.execute('''
                 INSERT INTO secretaire (nom, prenom, age)
                 VALUES (?, ?, ?)
-            ''', (self.nom, self.prenom, self.age))
+            ''', (self.nom, self.Prenom, self.age))
 
             connection.commit()
             connection.close()
