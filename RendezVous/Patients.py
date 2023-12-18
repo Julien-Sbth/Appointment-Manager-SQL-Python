@@ -38,20 +38,20 @@ class Patient:
             print(f"Erreur lors de l'ajout du patient : {e}")
 
     def remove_from_database(self):
-            try:
-                connection = sqlite3.connect('database.sqlite')
-                cursor = connection.cursor()
+        try:
+            connection = sqlite3.connect('database.sqlite')
+            cursor = connection.cursor()
 
-                cursor.execute('''
+            cursor.execute('''
                     DELETE FROM patient
                     WHERE prenom = ? AND nom = ? AND age = ? AND sexe = ?
                 ''', (self.prenom, self.nom, self.age, self.sexe))
 
-                connection.commit()
-                connection.close()
-                print("Le patient a été supprimé de la base de données avec succès.")
-            except sqlite3.Error as e:
-                print(f"Erreur lors de la suppression du patient : {e}")
+            connection.commit()
+            connection.close()
+            print("Le patient a été supprimé de la base de données avec succès.")
+        except sqlite3.Error as e:
+            print(f"Erreur lors de la suppression du patient : {e}")
 
     @staticmethod
     def Modif_Patient(prenom, nom, age, sex):
