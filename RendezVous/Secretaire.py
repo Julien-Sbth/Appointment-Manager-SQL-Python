@@ -3,7 +3,7 @@ import sqlite3
 
 class Secretaire:
 
-    def __init__(self, Prenom, nom, age, id):
+    def __init__(self, Prenom, nom, age, id=0):
         self.Prenom = Prenom
         self.nom = nom
         self.age = age
