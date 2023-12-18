@@ -1,17 +1,18 @@
 
 class RendezVous:
- 
 
+    def __init__(self, date, heure, patient, medecin, secretaire):
+        self.date = date
+        self.heure = heure
+        self.patient = patient
+        self.medecin = medecin
+        self.secretaire = secretaire
 
-    @staticmethod
-    def prendre_rendezvous(cls):
+    def prendre_rendezvous(self):
         pass
 
-    @staticmethod
-    def Modification(cls):
+    def Modification(self):
         pass
 
-    @staticmethod
-    def Supression(cls):
+    def Supression(self):
         pass
-
