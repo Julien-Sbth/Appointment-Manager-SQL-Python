@@ -3,12 +3,13 @@ from enum import Enum, auto
 
 
 class Spe(Enum):
-    PEDIATRE:auto()
-    GENERALISTE:auto()
-    DENTISTE:auto()
+    PEDIATRE: auto()
+    GENERALISTE: auto()
+    DENTISTE: auto()
+
 
 class Medecin:
-    def __init__(self,specialite:Spe="",nom="",prenom="",id=0):
+    def __init__(self, specialite: Spe = "", nom="", prenom="", id=0):
         self.id = id
         self.spe = specialite
         self.nom = nom
@@ -43,7 +44,7 @@ class Medecin:
 
     def update_from_database(self):
         try:
-            connection = sqlite3.connect('database.sqlite')
+            connection = sqlite3.connect('../database.sqlite')
             cursor = connection.cursor()
 
             cursor.execute('''
@@ -60,7 +61,7 @@ class Medecin:
 
     def remove_from_database(self):
         try:
-            connection = sqlite3.connect('database.sqlite')
+            connection = sqlite3.connect('../database.sqlite')
             cursor = connection.cursor()
 
             cursor.execute('''
