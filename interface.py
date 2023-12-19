@@ -75,8 +75,7 @@ def interfaceRendezVous():
             patient = input("Entrez le nouvel ID du patient : ")
 
             RendezVous.modifier_rendezvous(id_rendezvous, date, heure, medecin, secretaire, patient)
-def interfaceSecretaire():
-    while True:
+while True:
         print("1 Pour ajouter un secretaire")
         print("2 Pour modifier un secretaire")
         print("3 Pour supprimer un secretaire")
