@@ -1,6 +1,6 @@
 import sqlite3
 
-import RendezVous
+from RendezVous.PrendreRendezVous import RendezVous
 from RendezVous.Patients import Patient
 from RendezVous.Secretaire import Secretaire
 
@@ -48,7 +48,33 @@ def interfacePatient():
         else:
             print("Choix invalide. Veuillez entrer un choix valide.")
 
+def interfaceRendezVous():
+    print("1 pour prendre un rendez-vous")
+    print("2 pour supprimer un rendez-vous")
+    print("3 pour modifier un rendez-vous")
+    choix = input("Entrez votre choix (ou 'q' pour quitter) : ")
+    if choix == "1":
+        date = input("Entrez la date du rendez-vous (au format YYYY-MM-DD) : ")
+        heure = input("Entrez l'heure du rendez-vous (au format HH:MM) : ")
+        medecin = input("Entrez l'ID du médecin : ")
+        secretaire = input("Entrez l'ID du secrétaire : ")
+        patient = input("Entrez l'ID du patient : ")
 
+        # Appelez ensuite la fonction prendre_rendezvous avec les informations saisies
+        RendezVous.prendre_rendezvous(date, heure, medecin, secretaire, patient)
+    if choix == "2":
+        id_rendezvous = input("Entrez l'ID du rendez-vous à supprimer : ")
+        RendezVous.Supression(id_rendezvous)
+    if choix == "3":
+        if choix == "3":  # Supposons que "3" est le choix pour modifier un rendez-vous
+            id_rendezvous = input("Entrez l'ID du rendez-vous à modifier : ")
+            date = input("Entrez la nouvelle date du rendez-vous (au format YYYY-MM-DD) : ")
+            heure = input("Entrez la nouvelle heure du rendez-vous (au format HH:MM) : ")
+            medecin = input("Entrez le nouvel ID du médecin : ")
+            secretaire = input("Entrez le nouvel ID du secrétaire : ")
+            patient = input("Entrez le nouvel ID du patient : ")
+
+            RendezVous.modifier_rendezvous(id_rendezvous, date, heure, medecin, secretaire, patient)
 def interfaceSecretaire():
     while True:
         print("1 Pour ajouter un secretaire")
