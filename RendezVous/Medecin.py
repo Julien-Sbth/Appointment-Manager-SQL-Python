@@ -3,15 +3,14 @@ from enum import Enum, auto
 
 
 class Spe(Enum):
-    PEDIATRE: auto()
-    GENERALISTE: auto()
-    DENTISTE: auto()
-
+    PEDIATRE:auto()
+    GENERALISTE:auto()
+    DENTISTE:auto()
 
 class Medecin:
-    def __init__(self, specialite: Spe = "", nom="", prenom="", id=0):
+    def __init__(self,prenom="",nom="",specialite="",id=0):
         self.id = id
-        self.spe = specialite
+        self.specialite = specialite
         self.nom = nom
         self.prenom = prenom
 
@@ -34,7 +33,7 @@ class Medecin:
             cursor.execute('''
                 INSERT INTO medecin (nom, prenom, specialite)
                 VALUES (?, ?, ?)
-            ''', (self.nom, self.prenom, self.spe))
+            ''', (self.nom, self.prenom, self.specialite))
 
             connection.commit()
             connection.close()
@@ -61,12 +60,12 @@ class Medecin:
 
     def remove_from_database(self):
         try:
-            connection = sqlite3.connect('../database.sqlite')
+            connection = sqlite3.connect('database.sqlite')
             cursor = connection.cursor()
 
             cursor.execute('''
-                DELETE FROM medecin
-                WHERE id = ?
+                DELETE FROM Medecin
+                WHERE MedecinID = ?
             ''', (self.id,))
 
             connection.commit()
@@ -74,3 +73,27 @@ class Medecin:
             print("Le medecin a été supprimé de la base de données avec succès.")
         except sqlite3.Error as e:
             print(f"Erreur lors de la suppression du medecin : {e}")
+
+    @staticmethod
+    def displayAllData():
+        try:
+            connection = sqlite3.connect('database.sqlite')
+            cursor = connection.cursor()
+
+            cursor.execute('''
+                         SELECT  MedecinId,prenom, nom FROM Medecin
+                     ''')
+
+            rows = cursor.fetchall()
+            connection.close()
+
+            if rows:
+                print("Liste des medecins :")
+                for row in rows:
+                    print(list(row))
+                return rows
+            else:
+                print("La table 'Medecin' est vide.")
+                return []
+        except sqlite3.Error as e:
+            print(f"Erreur lors de l'affichage des patients : {e}")

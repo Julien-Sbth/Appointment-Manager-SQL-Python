@@ -181,3 +181,100 @@ while True:
         break
     else:
         print("Choix invalide. Veuillez réessayer.")
+
+
+def interfaceMedecin():
+    while True:
+        print("1 Pour ajouter un medecin")
+        print("2 Pour modifier un medecin")
+        print("3 Pour supprimer un medecin")
+        choix = input("Entrez votre choix (ou 'q' pour quitter) : ")
+
+        if choix == "1":
+            def ajouter_medecin():
+                print("Entrez les détails du nouveau medecin :")
+                prenom = input("Nom du medecin : ")
+                nom = input("Prenom du medecin : ")
+                specialite = input("specialite du medecin : ")
+                nouveau_medecin = Medecin(prenom, nom, specialite)
+                nouveau_medecin.add_to_database()
+
+            ajouter_medecin()
+
+        elif choix == "2":
+            def update_medecin():
+                global connection
+                try:
+                    id = int(input("Entrez l'ID du medecin que vous voulez modifier : "))
+                    connection = sqlite3.connect('database.sqlite')
+                    cursor = connection.cursor()
+
+                    cursor.execute('SELECT * FROM medecin WHERE id = ?', (id,))
+                    doctor_data = cursor.fetchone()
+
+                    if doctor_data:
+                        print("Voici les détails actuels du medecin :")
+                        print(f"ID: {doctor_data[0]}")
+                        print(f"Nom: {doctor_data[1]}")
+                        print(f"Prenom: {doctor_data[2]}")
+                        print(f"Specialite: {doctor_data[3]}")
+
+                        print("\nEntrez les nouveaux détails du medecin :")
+                        prenom = input("Nouveau nom du medecin : ")
+                        nom = input("Nouveau prenom du medecin : ")
+                        specialite = input("Nouvelle specialite du medecin : ")
+
+                        nouveau_medecin = Medecin(prenom, nom, specialite, id)
+                        nouveau_medecin.update_from_database()
+
+                    else:
+                        print(f"Aucun medecin trouvé avec l'ID {id}")
+
+                except ValueError:
+                    print("Veuillez entrer un ID valide.")
+
+                except sqlite3.Error as e:
+                    print(f"Erreur lors de la récupération du medecin : {e}")
+
+                finally:
+                    if connection:
+                        connection.close()
+
+            update_medecin()
+
+        elif choix == "3":
+            def remove_medecin():
+                global connection
+                try:
+                    Medecin.displayAllData()
+                    id = int(input("Entrez l'ID du medecin que vous voulez supprimer : "))
+                    connection = sqlite3.connect('database.sqlite')
+                    cursor = connection.cursor()
+
+                    cursor.execute('SELECT * FROM medecin WHERE MedecinID = ?', (id,))
+                    doctor_data = cursor.fetchone()
+
+                    if doctor_data:
+                        print("Voici les détails actuels du medecin :")
+                        print(f"ID: {doctor_data[0]}")
+                        print(f"Nom: {doctor_data[1]}")
+                        print(f"Prenom: {doctor_data[2]}")
+                        print(f"Specialite: {doctor_data[3]}")
+
+                        confirmation = input("Voulez-vous vraiment supprimer ce medecin ? (o/n) : ")
+                        if confirmation.lower() == "o":
+                            medecin_a_supprimer = Medecin("", "", "", id)
+                            medecin_a_supprimer.remove_from_database()
+
+                    else:
+                        print(f"Aucun medecin trouvé avec l'ID {id}")
+                except ValueError:
+                    print("Veuillez entrer un ID valide.")
+                except sqlite3.Error as e:
+                    print(f"Erreur lors de la récupération du medecin : {e}")
+
+                finally:
+                    if connection:
+                        connection.close()
+
+            remove_medecin()
