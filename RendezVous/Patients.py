@@ -11,10 +11,9 @@ class Patient:
 
     def add_to_database(self):
         try:
-            connection = sqlite3.connect('database.sqlite')  # Chemin relatif pour la base de données
+            connection = sqlite3.connect('database.sqlite')
             cursor = connection.cursor()
 
-            # Création de la table si elle n'existe pas déjà
             cursor.execute('''
                 CREATE TABLE IF NOT EXISTS patient (
                     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -25,7 +24,6 @@ class Patient:
                 )
             ''')
 
-            # Insertion du patient dans la base de données
             cursor.execute('''
                 INSERT INTO patient (prenom, nom, age, sexe)
                 VALUES (?, ?, ?, ?)

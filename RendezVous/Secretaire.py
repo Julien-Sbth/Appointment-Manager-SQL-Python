@@ -1,12 +1,11 @@
-#Secretaire.py
 import sqlite3
+
 
 class Secretaire:
 
-    def __init__(self, Prenom, nom, age, id=0):
+    def __init__(self, Prenom, nom, id=0):
         self.Prenom = Prenom
         self.nom = nom
-        self.age = age
         self.id = id
 
     def add_to_database(self):
@@ -14,21 +13,18 @@ class Secretaire:
             connection = sqlite3.connect('database.sqlite')  # Chemin relatif pour la base de données
             cursor = connection.cursor()
 
-            # Création de la table si elle n'existe pas déjà
             cursor.execute('''
                 CREATE TABLE IF NOT EXISTS secretaire (
                     id INTEGER PRIMARY KEY AUTOINCREMENT,
                     nom TEXT NOT NULL,
-                    prenom TEXT NOT NULL,
-                    age INTEGER NOT NULL
+                    prenom TEXT NOT NULL
                 )
             ''')
 
-            # Insertion du patient dans la base de données
             cursor.execute('''
-                INSERT INTO secretaire (nom, prenom, age)
-                VALUES (?, ?, ?)
-            ''', (self.nom, self.Prenom, self.age))
+                INSERT INTO secretaire (nom, prenom)
+                VALUES (?, ?)
+            ''', (self.nom, self.Prenom))
 
             connection.commit()
             connection.close()
@@ -43,9 +39,9 @@ class Secretaire:
 
             cursor.execute('''
                    UPDATE secretaire
-                   SET nom = ?, prenom = ?, age = ?
+                   SET nom = ?, prenom = ?
                    WHERE SecretaireId = ?
-               ''', (self.nom, self.Prenom, self.age, self.id))
+               ''', (self.nom, self.Prenom, self.id))
 
             connection.commit()
             connection.close()
@@ -68,7 +64,6 @@ class Secretaire:
             print("Le secretaire a été supprimé de la base de données avec succès.")
         except sqlite3.Error as e:
             print(f"Erreur lors de la suppression du secretaire : {e}")
-
 
     @staticmethod
     def displayAllData():
@@ -93,4 +88,3 @@ class Secretaire:
                 return []
         except sqlite3.Error as e:
             print(f"Erreur lors de l'affichage des patients : {e}")
-

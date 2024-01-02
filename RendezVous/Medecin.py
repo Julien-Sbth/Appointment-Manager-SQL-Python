@@ -2,13 +2,10 @@ import sqlite3
 from enum import Enum, auto
 
 
-class Spe(Enum):
-    PEDIATRE:auto()
-    GENERALISTE:auto()
-    DENTISTE:auto()
+
 
 class Medecin:
-    def __init__(self,prenom="",nom="",specialite="",id=0):
+    def __init__(self, prenom="", nom="", specialite="", id=0):
         self.id = id
         self.specialite = specialite
         self.nom = nom
@@ -43,14 +40,14 @@ class Medecin:
 
     def update_from_database(self):
         try:
-            connection = sqlite3.connect('../database.sqlite')
+            connection = sqlite3.connect('database.sqlite')
             cursor = connection.cursor()
 
             cursor.execute('''
                    UPDATE medecin
                    SET nom = ?, prenom = ?, specialite = ?
-                   WHERE id = ?
-               ''', (self.nom, self.prenom, self.spe, self.id))
+                   WHERE MedecinID = ?
+               ''', (self.nom, self.prenom, self.specialite, self.id))
 
             connection.commit()
             connection.close()
