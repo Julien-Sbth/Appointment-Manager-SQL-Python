@@ -31,7 +31,7 @@ def interfacePatient():
                 global connection
                 try:
                     Patient.AllDisplayDataFromPatient()
-                    id = int(input("Entrez l'ID du secretaire que vous voulez supprimer : "))
+                    id = int(input("Entrez l'ID du patient que vous voulez supprimer : "))
                     connection = sqlite3.connect('database.sqlite')
                     cursor = connection.cursor()
 
@@ -44,14 +44,14 @@ def interfacePatient():
                         print(f"Nom: {patient_data[1]}")
                         print(f"Prenom: {patient_data[2]}")
 
-                        confirmation = input("Voulez-vous vraiment supprimer ce secretaire ? (o/n) : ")
+                        confirmation = input("Voulez-vous vraiment supprimer ce patient ? (o/n) : ")
                         if confirmation.lower() == "o":
                             connection = sqlite3.connect('database.sqlite')
                             cursor = connection.cursor()
                             cursor.execute('DELETE FROM Patient WHERE PatientID = ?', (id,))
                             connection.commit()
                             connection.close()
-                            print("La secrétaire a été supprimée de la base de données avec succès.")
+                            print("Le patient a été supprimée de la base de données avec succès.")
 
                     else:
                         print(f"Aucun patient trouvé avec l'ID {id}")
@@ -110,7 +110,7 @@ def interfaceRendezVous():
             RendezVous.modifier_rendezvous(id_rendezvous, date, heure, medecin, secretaire, patient)
 
 
-def interfacesecretaire():
+def interfaceSecretaire():
     while True:
         print("1 Pour ajouter un secretaire")
         print("2 Pour modifier un secretaire")
@@ -131,6 +131,7 @@ def interfacesecretaire():
             def update_secretaire():
                 global connection
                 try:
+                    Secretaire.displayAllData()
                     id = int(input("Entrez l'ID du secretaire que vous voulez modifier : "))
                     connection = sqlite3.connect('database.sqlite')
                     cursor = connection.cursor()
