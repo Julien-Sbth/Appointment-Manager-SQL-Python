@@ -9,9 +9,8 @@ from RendezVous.Medecin import Medecin
 def interfacePatient():
     while True:
         print("1 Pour ajouter un patient")
-        print("2 Pour prendre un rendez-vous")
-        print("3 Pour modifier un rendez-vous")
-        print("4 Pour supprimer un rendez-vous")
+        print("2 Pour supprimer un patient")
+        print("3 Pour modifier un patient")
         choix = input("Entrez votre choix (ou 'q' pour quitter) : ")
 
         if choix == "1":
@@ -20,18 +19,53 @@ def interfacePatient():
                 Prenom = input("Prenom du patient : ")
                 nom = input("Nom du patient : ")
                 age = int(input("age du patient : "))
-                condition = input("sexe du patient : ")
+                sexe = input("sexe du patient : ")
 
-                nouveau_patient = Patient(Prenom, nom, age, condition)
+                nouveau_patient = Patient(Prenom, nom, age, sexe)
                 nouveau_patient.add_to_database()
 
             ajouter_patient()
 
         elif choix == "2":
-            print(Patient.AllDisplayDataFromPatient())
-            prenom_patient = input("Entrez le prénom du patient à supprimer : ")
-            patient_a_supprimer = Patient(prenom_patient, "", 0, "")
-            patient_a_supprimer.remove_from_database()
+            def remove_patient():
+                global connection
+                try:
+                    Patient.AllDisplayDataFromPatient()
+                    id = int(input("Entrez l'ID du secretaire que vous voulez supprimer : "))
+                    connection = sqlite3.connect('database.sqlite')
+                    cursor = connection.cursor()
+
+                    cursor.execute('SELECT * FROM Patient WHERE PatientID = ?', (id,))
+                    patient_data = cursor.fetchone()
+
+                    if patient_data:
+                        print("Voici les détails actuels du patient :")
+                        print(f"ID: {patient_data[0]}")
+                        print(f"Nom: {patient_data[1]}")
+                        print(f"Prenom: {patient_data[2]}")
+
+                        confirmation = input("Voulez-vous vraiment supprimer ce secretaire ? (o/n) : ")
+                        if confirmation.lower() == "o":
+                            connection = sqlite3.connect('database.sqlite')
+                            cursor = connection.cursor()
+                            cursor.execute('DELETE FROM Patient WHERE PatientID = ?', (id,))
+                            connection.commit()
+                            connection.close()
+                            print("La secrétaire a été supprimée de la base de données avec succès.")
+
+                    else:
+                        print(f"Aucun patient trouvé avec l'ID {id}")
+                except ValueError:
+                    print("Veuillez entrer un ID valide.")
+                except sqlite3.Error as e:
+                    print(f"Erreur lors de la récupération du secretaire : {e}")
+
+                finally:
+                    if connection:
+                        connection.close()
+
+            remove_patient()
+
         elif choix == "3":
             Patient.AllDisplayDataFromPatient()
 
@@ -41,14 +75,11 @@ def interfacePatient():
             nouveau_sexe = input("Entrez le nouveau sexe : ")
 
             Patient.Modif_Patient(prenom_a_modifier, nouveau_nom, nouvel_age, nouveau_sexe)
-        elif choix == "4":
-            pass
 
         elif choix.lower() == "q":
             break
         else:
             print("Choix invalide. Veuillez entrer un choix valide.")
-
 
 def interfaceRendezVous():
     print("1 pour prendre un rendez-vous")
@@ -77,6 +108,7 @@ def interfaceRendezVous():
             patient = input("Entrez le nouvel ID du patient : ")
 
             RendezVous.modifier_rendezvous(id_rendezvous, date, heure, medecin, secretaire, patient)
+
 
 def interfacesecretaire():
     while True:
@@ -111,14 +143,12 @@ def interfacesecretaire():
                         print(f"ID: {secretary_data[0]}")
                         print(f"Nom: {secretary_data[1]}")
                         print(f"Prenom: {secretary_data[2]}")
-                        print(f"Age: {secretary_data[3]}")
 
                         print("\nEntrez les nouveaux détails du secretaire :")
                         prenom = input("Nouveau nom du secretaire : ")
                         nom = input("Nouveau prenom du secretaire : ")
-                        age = int(input("Nouvel age du secretaire : "))
 
-                        nouveau_secretaire = Secretaire(prenom, nom, age, id)
+                        nouveau_secretaire = Secretaire(prenom, nom, id)
                         nouveau_secretaire.update_from_database()
 
                     else:
@@ -134,7 +164,6 @@ def interfacesecretaire():
                     if connection:
                         connection.close()
 
-
             update_secretaire()
 
         elif choix == "3":
@@ -146,7 +175,7 @@ def interfacesecretaire():
                     connection = sqlite3.connect('database.sqlite')
                     cursor = connection.cursor()
 
-                    cursor.execute('SELECT * FROM secretaire WHERE id = ?', (id,))
+                    cursor.execute('SELECT * FROM secretaire WHERE SecretaireID = ?', (id,))
                     secretary_data = cursor.fetchone()
 
                     if secretary_data:
@@ -157,8 +186,12 @@ def interfacesecretaire():
 
                         confirmation = input("Voulez-vous vraiment supprimer ce secretaire ? (o/n) : ")
                         if confirmation.lower() == "o":
-                            secretaire_a_supprimer = Secretaire("", "", 0, id)
-                            secretaire_a_supprimer.remove_from_database()
+                            connection = sqlite3.connect('database.sqlite')
+                            cursor = connection.cursor()
+                            cursor.execute('DELETE FROM secretaire WHERE SecretaireID = ?', (id,))
+                            connection.commit()
+                            connection.close()
+                            print("La secrétaire a été supprimée de la base de données avec succès.")
 
                     else:
                         print(f"Aucun secretaire trouvé avec l'ID {id}")
@@ -170,7 +203,6 @@ def interfacesecretaire():
                 finally:
                     if connection:
                         connection.close()
-
 
             remove_secretaire()
 
@@ -202,6 +234,7 @@ def interfaceMedecin():
             def update_medecin():
                 global connection
                 try:
+                    Medecin.displayAllData()
                     id = int(input("Entrez l'ID du medecin que vous voulez modifier : "))
                     connection = sqlite3.connect('database.sqlite')
                     cursor = connection.cursor()
