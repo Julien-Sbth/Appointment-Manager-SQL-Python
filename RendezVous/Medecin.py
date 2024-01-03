@@ -78,19 +78,19 @@ class Medecin:
             cursor = connection.cursor()
 
             cursor.execute('''
-                         SELECT  MedecinId,prenom, nom FROM Medecin
-                     ''')
+                           SELECT MedecinID, prenom, nom FROM Medecin
+                       ''')
 
             rows = cursor.fetchall()
             connection.close()
 
             if rows:
-                print("Liste des medecins :")
+                print("Liste des patients :")
                 for row in rows:
                     print(list(row))
                 return rows
             else:
-                print("La table 'Medecin' est vide.")
+                print("La table 'patient' est vide.")
                 return []
         except sqlite3.Error as e:
             print(f"Erreur lors de l'affichage des patients : {e}")

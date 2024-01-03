@@ -54,16 +54,13 @@ class Secretaire:
             connection = sqlite3.connect('database.sqlite')
             cursor = connection.cursor()
 
-            cursor.execute('''
-                DELETE FROM secretaire
-                WHERE SecretaireId = ?
-            ''', (self.id,))
+            cursor.execute('DELETE FROM secretaire WHERE SecretaireID = ?', (id,))
 
             connection.commit()
             connection.close()
-            print("Le secretaire a été supprimé de la base de données avec succès.")
+            print("La secrétaire a été supprimé de la base de données avec succès.")
         except sqlite3.Error as e:
-            print(f"Erreur lors de la suppression du secretaire : {e}")
+            print(f"Erreur lors de la suppression de la secrétaire : {e}")
 
     @staticmethod
     def displayAllData():
